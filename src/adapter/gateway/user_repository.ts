@@ -1,9 +1,9 @@
-import { UserRepository } from '../../application/repository/user_repository'
+import { UserRepository } from '../../domain/repository/user_repository'
 import { User } from '../../domain/entity/user'
 import { DataSource } from 'typeorm'
 
 export class UserRepositoryImpl implements UserRepository {
-  private dataSource: DataSource
+  private readonly dataSource: DataSource
   constructor(dataSource: DataSource) {
     this.dataSource = dataSource
   }

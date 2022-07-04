@@ -11,6 +11,7 @@ export default function UserHandler(useCase: UserUseCase) {
       const users = await useCase.users()
       res.send(users)
     } catch (err) {
+      console.error(err)
       res.status(500).send({ message: 'Error fetching data' })
     }
   })
@@ -21,6 +22,7 @@ export default function UserHandler(useCase: UserUseCase) {
       const users = await useCase.userWithId(userId)
       res.send(users)
     } catch (err) {
+      console.error(err)
       res.status(500).send({ message: 'Error fetching data' })
     }
   })
@@ -30,6 +32,7 @@ export default function UserHandler(useCase: UserUseCase) {
       const users = await useCase.createUser({} as User)
       res.send(users)
     } catch (err) {
+      console.error(err)
       res.status(500).send({ message: 'Error fetching data' })
     }
   })

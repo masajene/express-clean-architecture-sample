@@ -1,6 +1,6 @@
-import { UserUseCase } from '../../application/usecase/user_usecase'
-import { User } from '../entity/user'
-import { UserRepository } from '../../application/repository/user_repository'
+import { UserUseCase } from '../usecase/user_usecase'
+import { User } from '../../domain/entity/user'
+import { UserRepository } from '../../domain/repository/user_repository'
 
 export class UserUseCaseImpl implements UserUseCase {
   private repository: UserRepository
