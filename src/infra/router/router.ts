@@ -1,6 +1,6 @@
 import express from 'express'
 import UserHandler from '../../adapter/handler/user_handler'
-import { UserUseCaseImpl } from '../../application/interactor/user_usecase'
+import { UserUseCaseImpl } from '../../domain/interactor/user_usecase'
 import { UserRepositoryImpl } from '../../adapter/gateway/user_repository'
 import { MySQLDataSource } from '../database/mysql_datasource'
 const router = express()

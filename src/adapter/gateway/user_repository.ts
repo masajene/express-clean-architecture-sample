@@ -1,5 +1,5 @@
 import { UserRepository } from '../../domain/repository/user_repository'
-import { User } from '../../domain/entity/user'
+import { User } from '../../entity/user'
 import { DataSource } from 'typeorm'
 
 export class UserRepositoryImpl implements UserRepository {

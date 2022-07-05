@@ -1,7 +1,8 @@
-import { UserUseCase } from '../../application/usecase/user_usecase'
+import { UserUseCase } from '../../domain/usecase/user_usecase'
 import express from 'express'
 import { Request, Response } from 'express'
-import { User } from '../../domain/entity/user'
+import { User } from '../../entity/user'
+import { UserViewModel } from '../../domain/model/user_view_model'
 
 export default function UserHandler(useCase: UserUseCase) {
   const router = express.Router()
@@ -29,7 +30,7 @@ export default function UserHandler(useCase: UserUseCase) {
 
   router.post('/', async (req: Request, res: Response) => {
     try {
-      const users = await useCase.createUser({} as User)
+      const users = await useCase.createUser({} as UserViewModel)
       res.send(users)
     } catch (err) {
       console.error(err)
