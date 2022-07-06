@@ -9,7 +9,13 @@ Expressはディレクトリ構成などを強制するフレームワークで�
 
 ### 概要
 クリーンアーキテクチャは Robert C. Martin( 通称ボブおじさん ) によって提唱されたアーキテクチャパターンです。
-クリーンアーキテクチャは**あるシステムの1機能を実現するアプリケーションを考えるとき、その実現する機能の領域(ドメイン)と技術の詳細に注目し、アプリケーションを4つの層に分けます。**
+クリーンアーキテクチャは**あるシステムの1機能を実現するアプリケーションを考えるとき、その実現する機能の領域(ドメイン)と技術の詳細に注目し、アプリケーションを4つの層に分けます。**  
+
+### 目的
+クリーンアーキテクチャの採用によって**テストの容易さ**と**変更に対しての強さ**を備えたソフトウェアにすることを目的とします。  
+監視の分離と依存関係を抽象化しているため、テスト用のモックを差し込むことが可能です。  
+またビジネスロジックに影響を与えず外的な変更(DBの変更やフレームワークの変更など)が可能になります
+
 
 ### それぞれのレイヤー
 | 用語                     | 意味                                    |
@@ -90,8 +96,51 @@ https://qiita.com/baby-degu/items/d058a62f145235a0f007
 - **上位レベルのモジュールは下位レベルのモジュールに依存すべきではない。 両方とも抽象に依存すべきである。**
 - **抽象は詳細に依存してはならない。詳細が抽象に依存すべきである。**
 
+### 例外について
+**内側の円は外側の円からのみ参照される** というルールに従わなくてもよいケースがあります。  
+代表的なものだと**ユーティリティ系の関数群**などがそれに当たります(日付計算や文字列処理など)  
+こういった処理はレイヤーに依存するものではないため、例外的にどこから参照しても良いものとします。
 
+### アンチパターン
+**内側の円は外側の円からのみ参照される** というルールの違反  
+外側の円を参照したい場合は必ずインターフェース経由とする  
+---
+**NG**
+```typescript
+export class SampleRepository {
+    async create(user: User): Promise<User> {
+        return this.dataSource.getRepository(User).create(user)
+    }
+    // ...
+}
 
+export class UserUseCaseImpl implements UserUseCase {
+    // 直接実装クラスに依存している
+  private repository: UserRepository
+	// ...
+}
+```
+**OK**
+```typescript
+// インターフェース定義
+export interface UserRepository {
+    create(user: User): Promise<User>
+}
+// インターフェース実装
+export class UserRepositoryImpl implements UserRepository {
+    async create(user: User): Promise<User> {
+        return this.dataSource.getRepository(User).create(user)
+    }
+    // ...
+}
+
+export class UserUseCaseImpl implements UserUseCase {
+    // インターフェースに依存しているのでDIPを利用できている
+    private repository: UserRepository
+    // ...
+}
+```
+---
 
 ## サンプル実装について
 クリーンアーキテクチャの原則を踏まえサンプル実装を行いました。
