@@ -3,7 +3,7 @@
 package "infra" {
     class ExpressRouter {
     }
-    class DataSource {
+    class MySQLDataSource {
     }
 }
 
@@ -20,6 +20,9 @@ package "interface adapter" {
         +create(user: User): Promise<User>
         +findAll(): Promise<User[]>
         +findWithId(id: number): Promise<User>
+    }
+    interface DBProvider {
+        +dataSource: DataSource
     }
 }
 
@@ -66,6 +69,9 @@ UserUseCase <|-- UserUseCaseImpl
 UserRepository <|-- UserRepositoryImpl
 UserUseCase --> UserRepository
 UserRepository --> User
+
+UserRepositoryImpl --> DBProvider
+MySQLDataSource <|-- DBProvider
 
 UserUseCase --> UserViewModel
 

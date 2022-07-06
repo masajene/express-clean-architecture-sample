@@ -6,7 +6,7 @@ import { MySQLDataSource } from '../database/mysql_datasource'
 const router = express()
 router.use(express.json())
 
-const userHandler = UserHandler(new UserUseCaseImpl(new UserRepositoryImpl(MySQLDataSource)))
+const userHandler = UserHandler(new UserUseCaseImpl(new UserRepositoryImpl(new MySQLDataSource())))
 
 router.use('/user', userHandler)
 

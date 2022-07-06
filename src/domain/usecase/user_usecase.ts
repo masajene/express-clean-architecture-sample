@@ -1,4 +1,3 @@
-import { User } from '../../entity/user'
 import { UserViewModel } from '../model/user_view_model'
 
 export interface UserUseCase {

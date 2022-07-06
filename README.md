@@ -105,6 +105,8 @@ https://qiita.com/baby-degu/items/d058a62f145235a0f007
 │   │   │   └── user_repository.ts
 │   │   └── handler # HTTPリクエストを受け、レスポンスを返す 
 │   │       └── user_handler.ts
+│   │   └── provider # DBアクセスのインターフェース定義を行う 
+│   │       └── db_provider.ts
 │   ├── domain # Domain層
 │   │   ├── interactor # usecaseの実装を行う
 │   │   │   └── user_usecase.ts
@@ -120,7 +122,6 @@ https://qiita.com/baby-degu/items/d058a62f145235a0f007
 │   ├── infra # Infrastructure層
 │   │   ├── database # Database接続の実装を行う
 │   │   │   ├── mysql_datasource.ts
-│   │   │   └── ormconfig.ts
 │   │   └── router # Expressの実装を行う
 │   │       └── router.ts
 │   └── main.ts # メインファイル Expressの実行を行う
