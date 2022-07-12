@@ -6,30 +6,39 @@ Expressはディレクトリ構成などを強制するフレームワークで�
 
 ## クリーンアーキテクチャとは
 ![CleanArchitecture.jpg](https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/28464/11d18689-9a99-5bc0-39dc-e48623f1d11c.jpeg)
+> 有名な図
 
 ### 概要
 クリーンアーキテクチャは Robert C. Martin( 通称ボブおじさん ) によって提唱されたアーキテクチャパターンです。
 クリーンアーキテクチャは**あるシステムの1機能を実現するアプリケーションを考えるとき、その実現する機能の領域(ドメイン)と技術の詳細に注目し、アプリケーションを4つの層に分けます。**  
 
 ### 目的
-クリーンアーキテクチャの採用によって**テストの容易さ**と**変更に対しての強さ**を備えたソフトウェアにすることを目的とします。  
+クリーンアーキテクチャの採用の目的は
+- 関心の分離を行う
+- 依存関係の単一方程化
+- 抽象に対して依存する
+
+それによって**テストの容易さ**と**変更に対しての強さ**を実現します。  
 監視の分離と依存関係を抽象化しているため、テスト用のモックを差し込むことが可能です。  
 またビジネスロジックに影響を与えず外的な変更(DBの変更やフレームワークの変更など)が可能になります
 
 
 ### それぞれのレイヤー
-| 用語                     | 意味                                    |
-|------------------------|---------------------------------------|
-| Entities               | データ構造やメソッドの集合体                        |
-| UseCases (domain)      | アプリケーション固有のビジネスロジック                   |
-| Interface Adapter      | 円の内外に合わせてデータやイベントを変換し、 内側と外側のレイヤーとを繋ぐ |
-| Frameworks and Drivers | 特定の条件下でのみ有効なコード。FW,DBなどが該当            |
+![CleanArchitecture.jpg](doc/ca_map.png)
 
-### Entity
+
+| 用語                         | 意味                                                         |
+| ---------------------------- | ------------------------------------------------------------ |
+| ①Entities Business Rules     | データ構造やメソッドの集合体                                 |
+| ②Application  Business Rules | アプリケーション固有のビジネスロジック                       |
+| ③Interface Adapter           | 円の内外に合わせてデータやイベントを変換し、 内側と外側のレイヤーとを繋ぐ |
+| ④Frameworks and Drivers      | 特定の条件下でのみ有効なコード。FW,DBなどが該当              |
+
+### ①Entities Business Rules
 Entity は**処理の方法に依存しない( どんな処理がされるのかは知らない )データ構造やメソッドの集合体**となります。外側の層には依存しないため、Use Case や他の層によってどのように使われるかを気にしません。 
 つまり**複数アプリケーションで共有可能で、外部変化( 機能追加など )による影響がないもの**だけが存在することになります。
 
-### UseCase
+### ②Application Business Rules
 UseCase は Entity を使って**アプリケーション固有のビジネスロジックを実現します。** 
 また、UseCase層には**入出力のための出入口(ポート)**は存在しますが、そのポートにどのような経路から入力があって、どこへ出力するのかは知りません。
 
@@ -38,15 +47,15 @@ UseCase は Entity を使って**アプリケーション固有のビジネス�
 Interface Adapter は**円の内外に合わせてデータやイベントを変換する**ためのレイヤーです。
 Entity を UI で表示するようのデータに変換したり **内側と外側のレイヤーとを繋ぐ役割**をこなします。Presenter や Repository( Gateway ) と言ったものがこの層に属します。
 
-### Presenter(handler)
-Presenter は UseCase で取得したデータを View( UI ) に伝えたり、逆に View からイベントの通知を受け取り UseCase に伝える、View( UI ) と UseCase を繋ぐ役割をこなします。
+### Handler(Presenter)
+HandlerはUseCaseで取得したデータをフレームワークに伝えたり、逆にフレームワークからイベントの通知を受け取り UseCase に伝える、フレームワークとUseCaseを繋ぐ役割をこなします。
 
-### Repository(Gateway)
-Repository は API への通信処理や DB の操作などの処理を隠蔽するためのもので、一般的には [Repository パターン](https://qiita.com/mikesorae/items/ff8192fb9cf106262dbf)と呼ばれるものです。UseCase は Repository を介して API への通信処理を行います。
+### Repository
+RepositoryはAPI への通信処理や DB の操作などの処理を隠蔽するためのもので、一般的には [Repository パターン](https://qiita.com/mikesorae/items/ff8192fb9cf106262dbf)と呼ばれるものです。UseCase は Repository を介して API への通信処理を行います。
 
-### Frameworks and Drivers
+### ④Frameworks and Drivers
 Frameworks and Driver には特定の条件下でのみ有効なコードが集まります。
-UI( View )、データベース、Web API クライアント( APIClient )などが該当します。どれも実装の詳細で、環境や顧客の要求変化にもっとも影響を受けます。
+データベース、Web API フレームワークなどが該当します。どれも実装の詳細で、環境や顧客の要求変化にもっとも影響を受けます。
 
 ### SOLID原則
 
@@ -82,7 +91,7 @@ https://qiita.com/baby-degu/items/d058a62f145235a0f007
 1. Express が Handler にAPIリクエストされたことを通知します。
 2. Handler は UseCase に「ユーザー情報を取得すること」を通知します。
 3. UseCase は 実際の処理は知らないので、実際の処理を取りまとめた Repository に「処理を行う」ように通知します。ここで**依存の関係は逆**になります。
-![dip](README.assets/dip.png)
+![dip](doc/dip.png)
 
 
 ### 依存関係逆転の原則( DIP )

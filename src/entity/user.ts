@@ -26,6 +26,7 @@ export class User {
 
   @UpdateDateColumn()
   readonly updatedAt?: Timestamp
+
   constructor(id: number, name: string, mainAddress: string) {
     this.id = id
     this.name = name

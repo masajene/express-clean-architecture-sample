@@ -1,8 +1,12 @@
 export class UserViewModel {
   private _id: number
+
   private _name: string
+
   private _mainAddress: string
+
   private _birthday: Date
+
   constructor(id: number, name: string, mainAddress: string, birthday: Date) {
     this._id = id
     this._name = name

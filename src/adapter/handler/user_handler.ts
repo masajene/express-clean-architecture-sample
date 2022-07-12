@@ -1,7 +1,5 @@
+import express, { Request, Response } from 'express'
 import { UserUseCase } from '../../domain/usecase/user_usecase'
-import express from 'express'
-import { Request, Response } from 'express'
-import { User } from '../../entity/user'
 import { UserViewModel } from '../../domain/model/user_view_model'
 
 export default function UserHandler(useCase: UserUseCase) {
@@ -12,7 +10,7 @@ export default function UserHandler(useCase: UserUseCase) {
       const users = await useCase.users()
       res.send(users)
     } catch (err) {
-      console.error(err)
+      console.log(err)
       res.status(500).send({ message: 'Error fetching data' })
     }
   })
@@ -23,7 +21,6 @@ export default function UserHandler(useCase: UserUseCase) {
       const users = await useCase.userWithId(userId)
       res.send(users)
     } catch (err) {
-      console.error(err)
       res.status(500).send({ message: 'Error fetching data' })
     }
   })
@@ -33,7 +30,6 @@ export default function UserHandler(useCase: UserUseCase) {
       const users = await useCase.createUser({} as UserViewModel)
       res.send(users)
     } catch (err) {
-      console.error(err)
       res.status(500).send({ message: 'Error fetching data' })
     }
   })

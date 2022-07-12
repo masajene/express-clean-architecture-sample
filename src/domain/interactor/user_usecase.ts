@@ -5,13 +5,16 @@ import { UserViewModel } from '../model/user_view_model'
 
 export class UserUseCaseImpl implements UserUseCase {
   private repository: UserRepository
+
   constructor(repository: UserRepository) {
     this.repository = repository
   }
 
   async users(): Promise<UserViewModel[]> {
     const entity = await this.repository.findAll()
-    return entity.map((v) => new UserViewModel(v.id, v.name, v.mainAddress, v.birthday))
+    return entity.map(
+      (v) => new UserViewModel(v.id, v.name, v.mainAddress, v.birthday)
+    )
   }
 
   async createUser(user: UserViewModel): Promise<boolean> {
@@ -22,6 +25,11 @@ export class UserUseCaseImpl implements UserUseCase {
 
   async userWithId(id: number): Promise<UserViewModel> {
     const entity = await this.repository.findWithId(id)
-    return new UserViewModel(entity.id, entity.name, entity.mainAddress, entity.birthday)
+    return new UserViewModel(
+      entity.id,
+      entity.name,
+      entity.mainAddress,
+      entity.birthday
+    )
   }
 }

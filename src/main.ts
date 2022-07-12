@@ -1,6 +1,8 @@
-import router from './infra/router/router'
 import bodyParser from 'body-parser'
+import router from './infra/router/router'
 import { MySQLDataSource } from './infra/database/mysql_datasource'
+
+/* eslint import/newline-after-import: "off" */
 ;(async () => {
   const db = new MySQLDataSource()
   await db.datasource().initialize()
