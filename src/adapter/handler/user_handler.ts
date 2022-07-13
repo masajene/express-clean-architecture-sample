@@ -10,7 +10,6 @@ export default function UserHandler(useCase: UserUseCase) {
       const users = await useCase.users()
       res.send(users)
     } catch (err) {
-      console.log(err)
       res.status(500).send({ message: 'Error fetching data' })
     }
   })
