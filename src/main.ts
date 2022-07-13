@@ -9,5 +9,6 @@ import { MySQLDataSource } from './infra/database/mysql_datasource'
 
   router.use(bodyParser.urlencoded({ extended: false }))
   router.use(bodyParser.json())
+  // eslint-disable-next-line no-console
   router.listen(4000, () => console.log('Running on server'))
 })()
