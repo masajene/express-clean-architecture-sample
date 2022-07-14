@@ -2,8 +2,10 @@ import 'reflect-metadata'
 import { DataSource } from 'typeorm'
 import * as dotenv from 'dotenv'
 import { MysqlConnectionOptions } from 'typeorm/driver/mysql/MysqlConnectionOptions'
+import { injectable } from 'inversify'
 import { DBProvider } from '../../adapter/provider/db_provider'
 
+@injectable()
 export class MySQLDataSource implements DBProvider {
   datasource = (): DataSource => {
     dotenv.config()

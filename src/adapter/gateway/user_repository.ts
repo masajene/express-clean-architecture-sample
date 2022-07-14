@@ -1,11 +1,14 @@
+import { inject, injectable } from 'inversify'
 import { UserRepository } from '../../domain/repository/user_repository'
 import { User } from '../../entity/user'
 import { DBProvider } from '../provider/db_provider'
+import { TYPES } from '../../di/inversify.types'
 
+@injectable()
 export class UserRepositoryImpl implements UserRepository {
   private readonly db: DBProvider
 
-  constructor(db: DBProvider) {
+  constructor(@inject(TYPES.DBProvider) db: DBProvider) {
     this.db = db
   }
 

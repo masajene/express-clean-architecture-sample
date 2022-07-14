@@ -1,16 +1,20 @@
+import { inject, injectable } from 'inversify'
 import { UserUseCase } from '../usecase/user_usecase'
 import { User } from '../../entity/user'
 import { UserRepository } from '../repository/user_repository'
 import { UserViewModel } from '../model/user_view_model'
+import { TYPES } from '../../di/inversify.types'
 
+@injectable()
 export class UserUseCaseImpl implements UserUseCase {
   private repository: UserRepository
 
-  constructor(repository: UserRepository) {
+  constructor(@inject(TYPES.UserRepository) repository: UserRepository) {
     this.repository = repository
   }
 
   async users(): Promise<UserViewModel[]> {
+    console.log('users')
     const entity = await this.repository.findAll()
     return entity.map(
       (v) => new UserViewModel(v.id, v.name, v.mainAddress, v.birthday)
