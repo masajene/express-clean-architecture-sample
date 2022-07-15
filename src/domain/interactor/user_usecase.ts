@@ -1,5 +1,4 @@
 import { UserUseCase } from '../usecase/user_usecase'
-import { User } from '../../entity/user'
 import { UserRepository } from '../repository/user_repository'
 import { UserViewModel } from '../model/user_view_model'
 
@@ -18,8 +17,14 @@ export class UserUseCaseImpl implements UserUseCase {
   }
 
   async createUser(user: UserViewModel): Promise<boolean> {
-    const param = new User(user.id, user.name, user.mainAddress)
-    const res = await this.repository.create(param)
+    const res = await this.repository.create({
+      id: user.id,
+      name: user.name,
+      mainAddress: user.mainAddress,
+      birthday: user.birthday,
+      createdAt: new Date(),
+      updatedAt: null
+    })
     return res != null
   }
 
