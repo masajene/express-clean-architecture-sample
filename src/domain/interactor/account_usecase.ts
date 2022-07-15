@@ -16,8 +16,11 @@ export class AccountUseCaseImpl implements AccountUseCase {
         )
     }
 
-    async accountWithEmail(mail: string): Promise<AccountViewModel> {
+    async accountWithEmail(mail: string): Promise<AccountViewModel|null> {
         const entity = await this.repository.findWithMail(mail)
+
+        if (!entity) return null;
+
         return new AccountViewModel(
             entity.id,
             entity.email,
