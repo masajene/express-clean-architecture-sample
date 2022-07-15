@@ -8,12 +8,21 @@ datasource db {
 }
 
 model User {
-  id           Int        @id @default(autoincrement())
-  name         String     @db.VarChar(255)
-  mainAddress  String     @db.VarChar(255) @map("main_address")
-  birthday     DateTime   @db.Date
-  createdAt    DateTime   @default(now()) @db.Timestamp(6) @map("created_at")
-  updatedAt    DateTime?  @db.Timestamp(6) @map("updated_at")
+  id          Int       @id @default(autoincrement())
+  name        String    @db.VarChar(255)
+  mainAddress String    @map("main_address") @db.VarChar(255)
+  birthday    DateTime  @db.Date
+  createdAt   DateTime  @default(now()) @map("created_at") @db.Timestamp(6)
+  updatedAt   DateTime? @map("updated_at") @db.Timestamp(6)
 
   @@map("ambitz_user")
+}
+
+model Account {
+  id        Int      @id @default(autoincrement())
+  email     String   @unique @db.VarChar(255)
+  password  String   @db.VarChar(255)
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamp(6)
+
+  @@map("ambitz_account")
 }
