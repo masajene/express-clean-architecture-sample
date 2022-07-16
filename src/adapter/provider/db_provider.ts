@@ -1,5 +1,5 @@
-import { DataSource } from 'typeorm'
+import { PrismaClient } from '@prisma/client'
 
 export interface DBProvider {
-  datasource(): DataSource
+  datasource(): PrismaClient
 }
