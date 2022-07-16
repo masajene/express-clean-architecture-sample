@@ -1,14 +1,12 @@
-import express, { Request, Response } from "express"
+import express, { NextFunction, Request, Response } from "express"
 import passport from "passport"
 import LocalStrategy from 'passport-local'
 import jwt from "jsonwebtoken"
-import {
-    Strategy as JWTStrategy,
-    ExtractJwt,
-    StrategyOptions,
-} from "passport-jwt";
+import { Strategy as JWTStrategy, ExtractJwt } from "passport-jwt";
 import { AccountViewModel } from "../../domain/model/account_view_model"
 import { AccountUseCase } from "../../domain/usecase/account_usecase"
+import logMiddleware from "./middleware/log_middleware";
+import errorMessageMiddleware from "./middleware/error_message_middleware";
 
 const JTW_SECRET = "AMBITZ_SECRET"
 
@@ -17,10 +15,7 @@ export default function AccountHandler(useCase: AccountUseCase) {
 
     passport.use('signup',
         new LocalStrategy(
-            {
-                usernameField: 'email',
-                passwordField: 'password'
-            },
+            { usernameField: 'email', passwordField: 'password' },
             async (email, password, done) => {
                 try {
                     const model = new AccountViewModel(
@@ -36,42 +31,36 @@ export default function AccountHandler(useCase: AccountUseCase) {
                 }
             }
         )
-    );
+    )
 
     passport.use('login',
         new LocalStrategy(
-            {
-                usernameField: 'email',
-                passwordField: 'password'
-            },
+            { usernameField: 'email', passwordField: 'password' },
             async (email, password, done) => {
                 try {
                     const account = await useCase.accountWithEmail(email);
 
                     if (!account) {
-                        return done(null, false, { message: 'Account not found' });
+                        return done(null, false, { message: 'アカウントが見つかりません' });
                     }
 
                     const validate = account.password === password;
 
                     if (!validate) {
-                        return done(null, false, { message: 'Wrong Password' });
+                        return done(null, false, { message: 'パスワードが無効です' });
                     }
 
-                    return done(null, account, { message: 'Logged in Successfully' });
+                    return done(null, account, { message: 'ログインできました' });
                 } catch (error) {
                     return done(error);
                 }
             }
         )
-    );
+    )
 
     passport.use(
         new JWTStrategy(
-            {
-                secretOrKey: JTW_SECRET,
-                jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken()
-            },
+            { secretOrKey: JTW_SECRET, jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken() },
             async (token, done) => {
                 try {
                     return done(null, token.account);
@@ -80,9 +69,10 @@ export default function AccountHandler(useCase: AccountUseCase) {
                 }
             }
         )
-    );
+    )
 
-    router.get('/list', passport.authenticate('jwt', { session: false }), async (req: Request, res: Response) => {
+    //this is how you can block to only a logged user access this route.
+    router.get('/list', passport.authenticate('jwt', { session: false }), async (req: Request, res: Response, next: NextFunction) => {
         try {
             const list = await useCase.accounts()
             res.send(
@@ -91,41 +81,39 @@ export default function AccountHandler(useCase: AccountUseCase) {
                 )
             )
         } catch (err) {
-            res.status(500).send({ message: 'Error fetching data' })
+            next(err)
         }
     })
 
     router.post('/', passport.authenticate('signup', { session: false }), async (req: Request, res: Response) => {
-        try {
-            res.send(true)
-        } catch (err) {
-            res.status(500).send({ message: 'Error fetching data' })
-        }
+        res.send(true)
     })
 
-    router.post(
-        '/login',
-        async (req, res, next) => {
-            passport.authenticate(
-                'login',
-                async (err, account) => {
-                    try {
-                        if (err || !account) {
-                            const error = new Error('An error occurred.');
-                            return next(error);
-                        }
+    router.post('/login', async (req: Request, res: Response, next: NextFunction) => {
+        passport.authenticate(
+            'login',
+            async (err, account) => {
+                try {
 
-                        const body = { id: account.id, email: account.email };
-                        const token = jwt.sign({ account: body }, JTW_SECRET);
+                    if (err) { return next(err); }
 
-                        return res.json({ token });
-                    } catch (error) {
-                        return next(error);
+                    if (!account) { 
+                        return next(new Error('アカウントが見つかりません')); 
                     }
+
+                    const body = { id: account.id, email: account.email };
+                    const token = jwt.sign({ account: body }, JTW_SECRET);
+
+                    return res.json({ token });
+                } catch (error) {
+                    return next(error);
                 }
-            )(req, res, next);
-        }
-    );
+            }
+        )(req, res, next);
+    })
+
+    router.use(logMiddleware)
+    router.use(errorMessageMiddleware)
 
     return router
 }
