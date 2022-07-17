@@ -14,5 +14,9 @@
       "esModuleInterop": true,
       "sourceMap": true,
       "allowSyntheticDefaultImports": true
-   }
+   },
+   "include": [
+      "./src",
+      "./.eslintrc.js"
+      ]
 }

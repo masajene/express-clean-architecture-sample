@@ -1,5 +1,3 @@
-import { DBProvider } from '../adapter/provider/db_provider'
-
 export const TYPES = {
   // DB
   DBProvider: Symbol.for('DBProvider'),
@@ -7,4 +5,8 @@ export const TYPES = {
   // User
   UserUseCase: Symbol.for('UserUseCase'),
   UserRepository: Symbol.for('UserRepository'),
+
+  // User
+  AccountUseCase: Symbol.for('AccountUseCase'),
+  AccountRepository: Symbol.for('AccountRepository'),
 }

@@ -1,3 +1,5 @@
+import Utils from '../../tools/Utils'
+
 export class UserViewModel {
   private _id: number
 
@@ -44,5 +46,14 @@ export class UserViewModel {
 
   set birthday(value: Date) {
     this._birthday = value
+  }
+
+  serialize() {
+    return {
+      id: this.id,
+      name: this.name,
+      mainAddress: this.mainAddress,
+      birthday: Utils.dateToDateString(this.birthday),
+    }
   }
 }

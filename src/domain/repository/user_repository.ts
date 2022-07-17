@@ -1,4 +1,4 @@
-import { User } from '../../entity/user'
+import { User } from '@prisma/client'
 
 export interface UserRepository {
   findAll(): Promise<User[]>
