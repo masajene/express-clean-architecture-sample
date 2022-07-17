@@ -1,11 +1,15 @@
 import { User } from '@prisma/client'
+import { inject, injectable } from 'inversify'
 import { UserRepository } from '../../domain/repository/user_repository'
 import { DBProvider } from '../provider/db_provider'
+import { TYPES } from '../../di/inversify.types'
+import 'reflect-metadata'
 
+@injectable()
 export class UserRepositoryImpl implements UserRepository {
   private readonly db: DBProvider
 
-  constructor(db: DBProvider) {
+  constructor(@inject(TYPES.DBProvider) db: DBProvider) {
     this.db = db
   }
 
@@ -16,8 +20,8 @@ export class UserRepositoryImpl implements UserRepository {
         mainAddress: user.mainAddress,
         birthday: user.birthday,
         createdAt: user.createdAt,
-        updatedAt: user.updatedAt
-      }
+        updatedAt: user.updatedAt,
+      },
     })
   }
 

@@ -38,7 +38,7 @@ export class AccountViewModel {
   serialize() {
     return {
       id: this.id,
-      email: this.email
+      email: this.email,
     }
   }
 }

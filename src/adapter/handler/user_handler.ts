@@ -9,11 +9,7 @@ export default function UserHandler(useCase: UserUseCase) {
   router.get('/', async (req: Request, res: Response) => {
     try {
       const users = await useCase.users()
-      res.send(
-        users.map(
-          (u) => u.serialize()
-        )
-      )
+      res.send(users.map((u) => u.serialize()))
     } catch (err) {
       res.status(500).send({ message: 'Error fetching data' })
     }
@@ -36,7 +32,7 @@ export default function UserHandler(useCase: UserUseCase) {
         req.body.name,
         req.body.mainAddress,
         Utils.dateStringToDate(req.body.birthday)
-      );
+      )
       const result = await useCase.createUser(model)
       res.send(result)
     } catch (err) {

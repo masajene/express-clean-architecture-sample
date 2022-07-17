@@ -1,4 +1,4 @@
-import Utils from "../../tools/Utils"
+import Utils from '../../tools/Utils'
 
 export class UserViewModel {
   private _id: number
@@ -53,7 +53,7 @@ export class UserViewModel {
       id: this.id,
       name: this.name,
       mainAddress: this.mainAddress,
-      birthday: Utils.dateToDateString(this.birthday)
+      birthday: Utils.dateToDateString(this.birthday),
     }
   }
 }
