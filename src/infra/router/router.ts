@@ -8,7 +8,7 @@ import { accountContainer, userContainer } from '../../di/inversify.config'
 import { UserUseCase } from '../../domain/usecase/user_usecase'
 import { TYPES } from '../../di/inversify.types'
 import { AccountUseCase } from '../../domain/usecase/account_usecase'
-import {swaggerSpec} from "./swagger";
+import { swaggerSpec } from './swagger'
 
 const router = express()
 router.use(express.json())
