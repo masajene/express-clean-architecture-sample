@@ -6,6 +6,15 @@ import Utils from '../../tools/Utils'
 export default function UserHandler(useCase: UserUseCase) {
   const router = express.Router()
 
+  /**
+   * @openapi
+   * /:
+   *   get:
+   *     description: Welcome to swagger-jsdoc!
+   *     responses:
+   *       200:
+   *         description: Returns a mysterious string.
+   */
   router.get('/', async (req: Request, res: Response) => {
     try {
       const users = await useCase.users()
@@ -15,6 +24,15 @@ export default function UserHandler(useCase: UserUseCase) {
     }
   })
 
+  /**
+   * @openapi
+   * /{id}:
+   *   get:
+   *     description: Welcome to swagger-jsdoc!
+   *     responses:
+   *       200:
+   *         description: Returns a mysterious string.
+   */
   router.get('/:id', async (req: Request, res: Response) => {
     try {
       const userId = Number(req.params.id)
@@ -25,6 +43,15 @@ export default function UserHandler(useCase: UserUseCase) {
     }
   })
 
+  /**
+   * @openapi
+   * /:
+   *   post:
+   *     description: Welcome to swagger-jsdoc!
+   *     responses:
+   *       200:
+   *         description: Returns a mysterious string.
+   */
   router.post('/', async (req: Request, res: Response) => {
     try {
       const model = new UserViewModel(
