@@ -14,7 +14,6 @@ export class UserUseCaseImpl implements UserUseCase {
   }
 
   async users(): Promise<UserViewModel[]> {
-    console.log('users')
     const entity = await this.repository.findAll()
     return entity.map(
       (v) => new UserViewModel(v.id, v.name, v.mainAddress, v.birthday)

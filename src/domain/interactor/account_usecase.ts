@@ -9,7 +9,7 @@ import 'reflect-metadata'
 export class AccountUseCaseImpl implements AccountUseCase {
   private repository: AccountRepository
 
-  constructor(@inject(TYPES.DBProvider) repository: AccountRepository) {
+  constructor(@inject(TYPES.AccountRepository) repository: AccountRepository) {
     this.repository = repository
   }
 
