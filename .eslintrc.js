@@ -9,6 +9,13 @@ module.exports = {
   plugins: ['@typescript-eslint'],
   env: { node: true, es6: true },
   parser: '@typescript-eslint/parser',
+  settings: {
+    'import/resolver': {
+      node: {
+        extensions: ['.js', '.jsx', '.json', '.ts', '.tsx'],
+      },
+    },
+  },
   parserOptions: {
     sourceType: 'module',
     project: './tsconfig.json',

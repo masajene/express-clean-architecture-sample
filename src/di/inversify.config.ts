@@ -1,5 +1,4 @@
 import { Container } from 'inversify'
-// eslint-disable-next-line import/extensions
 import { DBProvider } from '../adapter/provider/db_provider'
 import { UserRepository } from '../domain/repository/user_repository'
 import { TYPES } from './inversify.types'
