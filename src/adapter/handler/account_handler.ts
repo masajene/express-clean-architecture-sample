@@ -1,3 +1,4 @@
+import 'dotenv/config'
 import express, { NextFunction, Request, Response } from 'express'
 import LocalStrategy from 'passport-local'
 import jwt from 'jsonwebtoken'
@@ -88,12 +89,32 @@ export default function AccountHandler(useCase: AccountUseCase) {
 
           const body = { id: account.id, email: account.email }
           const token = jwt.sign({ account: body }, process.env.JWT_SECRET)
-
-          return res.json({ token })
+          const payload = {
+            user: {
+              email: account.email,
+              displayName: 'ユーザー',
+            },
+            access_token: token,
+            refresh_token: '',
+          }
+          console.log(payload)
+          return res.json(payload)
         } catch (error) {
           return next(error)
         }
       })(req, res, next)
+    }
+  )
+
+  router.post(
+    '/logout',
+    passport.authenticate('jwt', { session: false }),
+    async (req: Request, res: Response, next: NextFunction) => {
+      try {
+        res.send()
+      } catch (err) {
+        next(err)
+      }
     }
   )
 

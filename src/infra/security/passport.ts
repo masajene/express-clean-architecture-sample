@@ -1,3 +1,4 @@
+import 'dotenv/config'
 import passport from 'passport'
 import { ExtractJwt, Strategy as JWTStrategy } from 'passport-jwt'
 
