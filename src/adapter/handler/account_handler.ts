@@ -1,14 +1,9 @@
 import express, { NextFunction, Request, Response } from 'express'
-import passport from 'passport'
 import LocalStrategy from 'passport-local'
 import jwt from 'jsonwebtoken'
-import { Strategy as JWTStrategy, ExtractJwt } from 'passport-jwt'
 import { AccountViewModel } from '../../domain/model/account_view_model'
 import { AccountUseCase } from '../../domain/usecase/account_usecase'
-import logMiddleware from './middleware/log_middleware'
-import errorMessageMiddleware from './middleware/error_message_middleware'
-
-const JTW_SECRET = 'AMBITZ_SECRET'
+import passport from '../../infra/security/passport'
 
 export default function AccountHandler(useCase: AccountUseCase) {
   const router = express.Router()
@@ -56,22 +51,6 @@ export default function AccountHandler(useCase: AccountUseCase) {
     )
   )
 
-  passport.use(
-    new JWTStrategy(
-      {
-        secretOrKey: JTW_SECRET,
-        jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-      },
-      async (token, done) => {
-        try {
-          return done(null, token.account)
-        } catch (error) {
-          return done(error)
-        }
-      }
-    )
-  )
-
   // this is how you can block to only a logged user access this route.
   router.get(
     '/list',
@@ -108,7 +87,7 @@ export default function AccountHandler(useCase: AccountUseCase) {
           }
 
           const body = { id: account.id, email: account.email }
-          const token = jwt.sign({ account: body }, JTW_SECRET)
+          const token = jwt.sign({ account: body }, process.env.JWT_SECRET)
 
           return res.json({ token })
         } catch (error) {
@@ -117,9 +96,6 @@ export default function AccountHandler(useCase: AccountUseCase) {
       })(req, res, next)
     }
   )
-
-  router.use(logMiddleware)
-  router.use(errorMessageMiddleware)
 
   return router
 }

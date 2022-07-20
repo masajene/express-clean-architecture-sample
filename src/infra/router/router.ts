@@ -9,10 +9,14 @@ import { UserUseCase } from '../../domain/usecase/user_usecase'
 import { TYPES } from '../../di/inversify.types'
 import { AccountUseCase } from '../../domain/usecase/account_usecase'
 import { swaggerSpec } from './swagger'
+import logMiddleware from '../middleware/log_middleware'
+import errorMessageMiddleware from '../middleware/error_message_middleware'
 
 const router = express()
 router.use(express.json())
 router.use(morgan('combined'))
+router.use(logMiddleware)
+router.use(errorMessageMiddleware)
 router.use(bodyParser.urlencoded({ extended: false }))
 router.use(bodyParser.json())
 router.use(cors())
