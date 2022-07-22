@@ -1,9 +1,17 @@
 @startuml
 
 package "infra" {
-    class ExpressRouter {
+    package "router" {
+        class ExpressRouter {
+        }
     }
-    class MySQLDataSource {
+    package "database" {
+        class PostgresqlDataSource {
+        }
+    }
+    package "middleware" {
+    }
+    package "security" {
     }
 }
 
@@ -52,7 +60,7 @@ package "domain" {
         updatedAt: date
     }
 }
-package "entity" {
+package "prisma(entity)" {
     entity User {
         id: number
         name: string
@@ -60,6 +68,11 @@ package "entity" {
         birthday: string
         createdAt: date
         updatedAt: date
+    }
+}
+
+package "utils" {
+    class utils {
     }
 }
 
@@ -71,7 +84,7 @@ UserUseCase --> UserRepository
 UserRepository --> User
 
 UserRepositoryImpl --> DBProvider
-MySQLDataSource <|-- DBProvider
+PostgresqlDataSource <|-- DBProvider
 
 UserUseCase --> UserViewModel
 
