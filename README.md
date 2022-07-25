@@ -173,7 +173,7 @@ export class UserUseCaseImpl implements UserUseCase {
 
 ### UML
 
-![UML](./uml.png)
+![UML](doc/uml.png)
 
 ### 構成
 
