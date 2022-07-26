@@ -1,5 +1,9 @@
 version: 0.2
 
+env:
+  parameter-store:
+    AMBITZ_SECRET: "/traceqr_ja/backend/sample/secret"
+    DATABASE_URL: "/traceqr_ja/backend/sample/db_url"
 phases:
   pre_build:
     commands:
@@ -19,6 +23,7 @@ phases:
     commands:
       - echo Build started on `date`
       - echo Building the Docker image...
+      - echo $AMBITZ_SECRET
       - docker build -t $REPOSITORY_URI:latest .
       - docker tag $REPOSITORY_URI:latest $REPOSITORY_URI:$IMAGE_TAG
 
