@@ -7,8 +7,9 @@
     "preinstall": "npx npm-force-resolutions",
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "ts-node-dev --respawn src/main.ts",
-    "lint": "eslint './src/**/*.{js,jsx,ts,tsx}'",
-    "lint:fix": "eslint --fix './src/**/*.{js,jsx,ts,tsx}'",
+    "lint": "eslint --format junit './src/**/*.{js,jsx,ts,tsx}'",
+    "lint:fix": "eslint --fix  --format junit './src/**/*.{js,jsx,ts,tsx}'",
+    "lint:report": "eslint --format junit --output-file reports/eslint.xml './src/**/*.{js,jsx,ts,tsx}'",
     "format": "prettier --check './src/**/*.{js,jsx,ts,tsx}'",
     "format:fix": "prettier --write './src/**/*.{js,jsx,ts,tsx}'",
     "build": "tsc"

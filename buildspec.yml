@@ -5,6 +5,12 @@ env:
     AMBITZ_SECRET: "/traceqr_ja/backend/sample/secret"
     DATABASE_URL: "/traceqr_ja/backend/sample/db_url"
 phases:
+  install:
+    runtime-versions:
+      nodejs: 14
+    commands:
+      - npm i
+      - npm run lint:report
   pre_build:
     commands:
       - echo Logging in to Amazon ECR...
@@ -37,3 +43,8 @@ phases:
       - printf '[{"name":"%s","imageUri":"%s"}]' $CONTAINER_NAME $REPOSITORY_URI:$IMAGE_TAG > imagedefinitions.json
 artifacts:
   files: imagedefinitions.json
+reports:
+  unittest-rep-group:
+    files:
+      - '**/*'
+    base-directory: reports/
